@@ -8,7 +8,7 @@ The dataset is from kaggle and it is a csv file as provided here. [Dataset](/Dat
 
 ## Notebook
 
-The notebook is the file that contains the code for the project. [Notebook](/Notebook/Notebook.ipynb)
+The notebook is the file that contains the code for the project. [Notebook](Notebook.ipynb)
 
 ## Steps involved in the project
 

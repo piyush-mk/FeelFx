@@ -55,7 +55,7 @@ def predict_sentiment2(review):
         return("positive")
 
 def page():
-    st.title("Spotify Review Analyser")
+    st.title("FeelFx | A Review Analyser trained on Spotify Reviews")
     #text input
     st.markdown("<span style='font-size:25px'><span style='color:#ed5f55'>Enter a review to predict the sentiment</span></span>", unsafe_allow_html=True)
     text = st.text_input("")

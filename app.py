@@ -1,37 +1,68 @@
 #streamlit app to input sentence and output the sentiment
-from imp import load_module
 import streamlit as st
 import numpy as np
+from nltk.corpus import stopwords
 import tensorflow as tf
-from tensorflow import keras
+from tensorflow import keras 
+from keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from nltk.stem import PorterStemmer
+import re
+
 st.set_page_config(page_title="Spotify Review Analyser", page_icon="🎵", layout="wide", initial_sidebar_state="auto", menu_items=None)
 import pandas as pd
 
-#title of the app
-st.title("Spotify Review Analyser")
-#text input
-st.subheader("Enter your review")
-text = st.text_input("")
-st.write("")
-#function to predict the sentiment using the model saved weights
-def predict_sentiment(text):
-    #load the model
-    model = load_module('model.h5')
-    from nltk.stem import PorterStemmer
+
+@st.cache_resource
+def load_data():
+    data = pd.read_csv('Dataset/reviews_cleaned.csv')
+    return data
+
+@st.cache_resource
+def load_model():
+    model2 = keras.models.load_model('model.h5')
+    model2.load_weights('model.h5')
+    return model2
+
+@st.cache_resource
+def load_tokenizer():
+    max_fatures = 2000
+    tokenizer = Tokenizer(num_words=max_fatures, split=' ')
+    tokenizer.fit_on_texts(data['Review'].values)
+    return tokenizer
+
+data = load_data()
+tokenizer = load_tokenizer()
+model2 = load_model()
+
+def predict_sentiment2(review):
+    review = re.sub('[^a-zA-Z]', ' ', review)
+    review = review.lower()
+    review = review.split()
     ps =PorterStemmer()
-    def predict_sentiment(review):
-        review = re.sub('[^a-zA-Z]', ' ', review)
-        review = review.lower()
-        review = review.split()
-        review = [ps.stem(word) for word in review if not word in stopwords.words('english')]
-        review = ' '.join(review)
-        corpus = [review]
-        X = tokenizer.texts_to_sequences(corpus)
-        X = pad_sequences(X, maxlen=316)
-        sentiment = model.predict(X,batch_size=1,verbose = 2)[0]
-        if(np.argmax(sentiment) == 0):
-            return("negative")
-        elif (np.argmax(sentiment) == 1):
-            return("neutral")
-        elif (np.argmax(sentiment) == 2):
-            return("positive")
+    review = [ps.stem(word) for word in review if not word in stopwords.words('english')]
+    review = ' '.join(review)
+    corpus = [review]
+    X = tokenizer.texts_to_sequences(corpus)
+    X = pad_sequences(X, maxlen=316)
+    sentiment = model2.predict(X,batch_size=1,verbose = 2)[0]
+    if(np.argmax(sentiment) == 0):
+        return("negative")
+    elif (np.argmax(sentiment) == 1):
+        return("neutral")
+    elif (np.argmax(sentiment) == 2):
+        return("positive")
+
+def page():
+    st.title("Spotify Review Analyser")
+    #text input
+    st.subheader("Enter your review")
+    text = st.text_input("")
+    st.write("")
+    #button to predict
+    st.button("Submit")
+    st.write("")
+    st.write("Predicted Sentiment: ", predict_sentiment2(text))
+page()
+
+    

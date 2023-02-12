@@ -8,7 +8,8 @@ from keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from nltk.stem import PorterStemmer
 import re
-
+import nltk
+nltk.download('stopwords')
 st.set_page_config(page_title="Spotify Review Analyser", page_icon="🎵", layout="wide", initial_sidebar_state="auto", menu_items=None)
 import pandas as pd
 

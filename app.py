@@ -9,9 +9,18 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from nltk.stem import PorterStemmer
 import re
 
-st.set_page_config(page_title="Spotify Review Analyser", page_icon="🎵", layout="centered", initial_sidebar_state="auto", menu_items=None)
+st.set_page_config(page_title="Spotify Review Analyser", page_icon="🎵", layout="wide", initial_sidebar_state="auto", menu_items=None)
 import pandas as pd
 
+def hide_anchor_link():
+    st.markdown("""
+        <style>
+        .css-15zrgzn {display: none}
+        </style>
+        """, unsafe_allow_html=True)
+
+
+hide_anchor_link()
 
 @st.cache_resource
 def load_data():

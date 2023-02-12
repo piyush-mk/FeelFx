@@ -9,7 +9,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from nltk.stem import PorterStemmer
 import re
 
-st.set_page_config(page_title="Spotify Review Analyser", page_icon="🎵", layout="wide", initial_sidebar_state="auto", menu_items=None)
+st.set_page_config(page_title="Spotify Review Analyser", page_icon="🎵", layout="centered", initial_sidebar_state="auto", menu_items=None)
 import pandas as pd
 
 
@@ -24,17 +24,18 @@ def load_model():
     model2.load_weights('model.h5')
     return model2
 
+data = load_data()
+
+model2 = load_model()
+
 @st.cache_resource
 def load_tokenizer():
     max_fatures = 2000
     tokenizer = Tokenizer(num_words=max_fatures, split=' ')
-    tokenizer.fit_on_texts(data['Review'].values)
+    Sentiment_text=data['Review'].astype(str)
+    tokenizer.fit_on_texts(Sentiment_text.values)
     return tokenizer
-
-data = load_data()
 tokenizer = load_tokenizer()
-model2 = load_model()
-
 def predict_sentiment2(review):
     review = re.sub('[^a-zA-Z]', ' ', review)
     review = review.lower()
@@ -56,13 +57,21 @@ def predict_sentiment2(review):
 def page():
     st.title("Spotify Review Analyser")
     #text input
-    st.subheader("Enter your review")
+    st.markdown("<span style='font-size:25px'><span style='color:#ed5f55'>Enter a review to predict the sentiment</span></span>", unsafe_allow_html=True)
     text = st.text_input("")
     st.write("")
-    #button to predict
-    st.button("Submit")
-    st.write("")
-    st.write("Predicted Sentiment: ", predict_sentiment2(text))
+    #make enter key hit submit button
+    if st.button("Submit"):
+        st.write("")
+        st.write("")
+        st.markdown("<span style='font-size:20px'>Predicted Sentiment:</span>", unsafe_allow_html=True)
+        st.write("")
+        if predict_sentiment2(text) == "positive":
+            st.markdown("<span style='font-size:20px'><span style='color:#00ff00'>Positive</span></span>", unsafe_allow_html=True)
+        elif predict_sentiment2(text) == "negative":
+            st.markdown("<span style='font-size:20px'><span style='color:#ff0000'>Negative</span></span>", unsafe_allow_html=True)
+        elif predict_sentiment2(text) == "neutral":
+            st.markdown("<span style='font-size:20px'><span style='color:#ffff00'>Neutral</span></span>", unsafe_allow_html=True)
 page()
 
     

@@ -1,4 +1,4 @@
-# Spotify_review_analyser
+# FeelFx - A Spotify app review sentiment analyser
 
 ## Use at [https://feelfx.streamlit.app/](https://feelfx.streamlit.app/)
 

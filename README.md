@@ -1,6 +1,6 @@
 # FeelFx - A Spotify app review sentiment analyser
 
-## Use at [https://feelfx.streamlit.app/](https://feelfx.streamlit.app/)
+## Use at [https://fxfeel.streamlit.app/](https://fxfeel.streamlit.app/)
 
 It is a web app that allows you to input a comment about spotify and it will analyse the comment and give you a sentiment score.
 
